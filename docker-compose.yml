@@ -1,0 +1,30 @@
+version: "3.9"
+
+services: 
+  ui-dev:
+    build:
+      context: .
+      target: dev
+    restart: always
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+      # - .node_modules:/usr/src/app/node_modules
+    ports:
+      - 1234:3000
+
+  deploy:
+    build:
+      context: .
+      target: build
+    # restart: always
+    ports:
+      - 80:3000
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+
+networks:
+  follow-network:
+    driver: bridge
